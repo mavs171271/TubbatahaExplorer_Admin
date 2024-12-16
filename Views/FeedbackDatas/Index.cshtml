@@ -1,0 +1,104 @@
+﻿@model IEnumerable<VisualHead.Models.FeedbackData>
+
+@{
+    ViewData["Title"] = "Feedback Analytics";
+}
+
+<h2 class="text-center">Feedback Analytics</h2>
+
+<!-- Analytics Chart Section -->
+<div class="chart-container" style="position: relative; width: 80%; margin: 20px auto; text-align: center;">
+    <canvas id="feedbackChart"></canvas>
+    <p id="feedbackInsights" style="font-weight: bold; margin-top: 20px;"></p>
+</div>
+
+<h2 class="text-center">User Feedback Records</h2>
+
+<!-- Feedback Table Section -->
+<div class="table-responsive text-center">
+    <table class="table table-bordered table-hover mx-auto" style="max-width: 90%; margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Feedback</th>
+                <th>Date</th>
+                <th class="d-none d-md-table-cell">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Types)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Body)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DateCreated)</td>
+                    <td class="d-none d-md-table-cell">
+                        <a asp-action="Delete" asp-route-id="@item.Rfid" class="btn btn-danger">Mark as done</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Get data from ViewBag
+        var feedbackData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.FeedbackCounts));
+
+        // Extract labels and data
+        var labels = feedbackData.map(f => f.Type);
+        var data = feedbackData.map(f => f.Count);
+
+        // Dynamic color generation
+        var backgroundColors = data.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.2)`);
+        var borderColors = data.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`);
+
+        // Generate dynamic insights
+        var maxFeedbackType = labels[data.indexOf(Math.max(...data))];
+        var maxFeedbackCount = Math.max(...data);
+        var minFeedbackType = labels[data.indexOf(Math.min(...data))];
+        var minFeedbackCount = Math.min(...data);
+
+        var insightsText = `The highest feedback type is "${maxFeedbackType}" with ${maxFeedbackCount} feedbacks.
+                                    The lowest feedback type is "${minFeedbackType}" with ${minFeedbackCount} feedbacks.`;
+
+        // Display insights
+        document.getElementById('feedbackInsights').innerText = insightsText;
+
+        // Render Chart
+        var ctx = document.getElementById('feedbackChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Feedback Count by Type',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `${context.label}: ${context.raw} feedbacks`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

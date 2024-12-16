@@ -1,0 +1,70 @@
+﻿@model IEnumerable<VisualHead.Models.UserProfile>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">User Profile Records</h1>
+
+<!-- Search Form -->
+<div class="text-center mb-4">
+    <form method="get" asp-controller="UserProfiles" asp-action="Index" class="form-inline justify-content-center">
+        <div class="input-group" style="max-width: 500px;">
+            <input type="text" name="searchQuery" class="form-control" placeholder="Search profiles..." value="@ViewBag.SearchQuery" />
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="table-responsive">
+    <table class="table table-bordered mx-auto" style="max-width: 90%;">
+        <thead>
+            <tr>
+                <th>UserName</th>
+                <th>Email Address</th>
+                <th class="d-none d-md-table-cell">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.UniqueUserName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
+                    <td class="d-none d-md-table-cell">
+                        <a asp-action="Edit" asp-route-id="@item.UniqueUserName" class="btn btn-primary">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.UniqueUserName" class="btn btn-warning">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.UniqueUserName" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation" class="text-center">
+    <ul class="pagination justify-content-center">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-searchQuery="@ViewBag.SearchQuery">Previous</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-searchQuery="@ViewBag.SearchQuery">@i</a>
+            </li>
+        }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-searchQuery="@ViewBag.SearchQuery">Next</a>
+            </li>
+        }
+    </ul>
+</nav>

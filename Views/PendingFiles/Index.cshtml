@@ -1,0 +1,38 @@
+﻿
+
+@{
+    ViewData["Title"] = "Pending File Uploads";
+}
+
+<h2 class="text-center">Pending File Uploads</h2>
+
+<!-- Table -->
+<div class="table-responsive">
+    <table class="table table-bordered mx-auto" style="max-width: 90%;">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Uploader</th>
+                <th class="d-none d-md-table-cell">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>@file.Title</td>
+                    <td>@file.User?.UserName</td>
+                    <td class="d-none d-md-table-cell">
+                        <a asp-action="ViewPDF" asp-route-id="@file.Id" target="_blank" class="btn btn-primary">View PDF</a>
+                        <form asp-action="Approve" asp-route-id="@file.Id" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                        <form asp-action="Reject" asp-route-id="@file.Id" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

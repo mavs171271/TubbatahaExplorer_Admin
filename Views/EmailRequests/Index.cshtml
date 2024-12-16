@@ -1,0 +1,61 @@
+﻿@model IEnumerable<VisualHead.Models.EmailRequest>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">User Email Request</h1>
+
+
+<!-- Table -->
+<div class="table-responsive">
+    <table class="table table-bordered mx-auto" style="max-width: 90%;">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.currentEmail)</th>
+                <th>@Html.DisplayNameFor(model => model.newEmail)</th>
+                <th class="d-none d-md-table-cell">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.currentEmail)</td>
+                    <td>@Html.DisplayFor(modelItem => item.newEmail)</td>
+
+                    <td class="d-none d-md-table-cell">
+                        <a asp-action="Approve" asp-route-id="@item.requestId" class="btn btn-primary">Approve</a> |
+                        <a asp-action="Delete" asp-route-id="@item.requestId" class="btn btn-danger">Reject</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation" class="text-center">
+    <ul class="pagination justify-content-center">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-searchQuery="@ViewBag.SearchQuery">Previous</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-searchQuery="@ViewBag.SearchQuery">@i</a>
+            </li>
+        }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-searchQuery="@ViewBag.SearchQuery">Next</a>
+            </li>
+        }
+    </ul>
+</nav>

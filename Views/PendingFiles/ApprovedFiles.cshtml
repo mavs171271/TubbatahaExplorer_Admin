@@ -1,0 +1,36 @@
+﻿@model IEnumerable<VisualHead.Models.UploadedFile>
+
+@{
+    ViewData["Title"] = "Approved Files";
+}
+
+<h2 class="text-center">Approved Files</h2>
+
+<!-- Table -->
+<div class="table-responsive">
+    <table class="table table-bordered mx-auto" style="max-width: 90%;">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>UserName</th>
+                <th class="d-none d-md-table-cell">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>@file.Title</td>
+                    <td>@file.User?.UserName</td>
+                    <td class="d-none d-md-table-cell">
+                        <a asp-action="ViewApprovedPDF" asp-route-id="@file.Id" target="_blank" class="btn btn-primary">View PDF</a>
+                        <a asp-action="EditApprovedFile" asp-route-id="@file.Id" class="btn btn-secondary">Edit</a>
+                        <form asp-action="DeleteApprovedFile" asp-route-id="@file.Id" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

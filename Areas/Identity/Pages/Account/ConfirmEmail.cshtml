@@ -1,0 +1,35 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+}
+
+
+<section class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12 text-center">
+            <!-- Admin Welcome Message -->
+            <h1 class="text-success fw-bold">Welcome, Administrator!</h1>
+            <p class="mt-4 fs-5">
+                Thank you for verifying your email and completing the registration process. As an admin of <strong>Tubbataha Explorer</strong>, you play a vital role in managing and organizing user records, ensuring a seamless experience for all contributors and participants.
+            </p>
+
+            <!-- Admin Role Highlights -->
+            <h3 class="mt-4">Your Role Includes:</h3>
+            <ul class="list-group list-group-flush text-start mx-auto mt-3" style="max-width: 600px;">
+                <li class="list-group-item fs-5">📋 Managing and reviewing user accounts and records to maintain platform integrity.</li>
+                <li class="list-group-item fs-5">✅ Approving or rejecting user-submitted content for quality and relevance.</li>
+                <li class="list-group-item fs-5">🔒 Ensuring data security and compliance with platform policies.</li>
+                <li class="list-group-item fs-5">🌟 Collaborating with contributors to encourage meaningful engagement.</li>
+            </ul>
+
+            <!-- Closing Paragraph -->
+            <p class="mt-4 fs-5">
+                With your expertise and commitment, we can continue to grow the <strong>Tubbataha Explorer</strong> platform into a trusted resource for marine education and conservation. Your efforts are essential to maintaining a well-organized and efficient system.
+            </p>
+
+            <!-- Call-to-Action Button -->
+            <a class="btn btn-primary mt-3 px-4 py-2" style="font-size: 1.2rem;" asp-page="/Account/Login" asp-area="Identity">Proceed to Login📊</a>
+        </div>
+    </div>
+</section>
